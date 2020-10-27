@@ -104,6 +104,10 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
 
       // TODO : transform date to dayofYear
       flightDate = DateUtils.getDayOfYearFromDateTime(selectedDateTime);
+      debugPrint("***************************** selectedDateTime : " +
+          selectedDateTime.toString());
+      debugPrint("***************************** selectedDateTime : " +
+          flightDate.toString());
 
       barcodeContentManually = barcodeContentManually + flightNo;
       barcodeContentManually = barcodeContentManually + flightDate;
@@ -249,56 +253,15 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
                       text: "Sequence Number",
                       controller: sequenceNumberController,
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Airline IATA Code",
-                            style: TextStyle(
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepPurple[400]),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: DropdownButton(
-                            hint: Text(
-                              airlineIata,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            isExpanded: true,
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.deepPurple[400],
-                            ),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.black),
-                            underline: Container(
-                              height: 1,
-                              color: Colors.black38,
-                            ),
-                            items: airlineStringList.map(
-                              (val) {
-                                return DropdownMenuItem<String>(
-                                  value: val,
-                                  child: Text(val),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (val) {
-                              setState(
-                                () {
-                                  airlineIata = val;
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                    CustomDropdown(
+                      label: "Airline IATA Code",
+                      onChanged: (String newValue) {
+                        setState(() {
+                          airlineIata = newValue;
+                        });
+                      },
+                      list: airlineStringList,
+                      value: airlineIata.trim(),
                     ),
                     CustomDropdown(
                       label: "From City Airport Code: ",

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hms_scan_demo/Passenger.dart';
-import 'package:intl/intl.dart';
 
 class BoardingPassParser {
   Passenger parseAndGetPassengerDetail(String barcodeContent) {
@@ -42,7 +41,7 @@ class BoardingPassParser {
           passenger.flightTo = barcodeContent.substring(33, 36);
           passenger.flightNo = barcodeContent.substring(39, 44);
           passenger.iataCode = barcodeContent.substring(36, 39); // piece7
-          var piece9 = barcodeContent.substring(44, 47);
+          String piece9 = barcodeContent.substring(44, 47);
           passenger.compartment = barcodeContent.substring(47, 48);
           passenger.flight = passenger.iataCode + " " + passenger.flightNo;
           String seatNumber = barcodeContent.substring(48, 52).trim();
@@ -50,27 +49,12 @@ class BoardingPassParser {
           RegExp regExp = RegExp(r'^0+(?=.)');
           seatNumber = seatNumber.replaceAll(regExp, "");
           passenger.seatNo = seatNumber;
+          passenger.flightDate = piece9;
 
           if (piece9.contains(" ")) {
             piece9 = piece9.trim();
           }
-          // TODO check it out
-          var now = new DateTime.now();
-          var dateFormat = new DateFormat('dd-MM-yyyy');
-          String formattedDate = dateFormat.format(now);
-          print("*******************************" + formattedDate);
-          var day = int.parse(piece9);
-          var myvalue = dateFormat.format(DateTime(day * 1000));
-          print("*******************************" + myvalue.toString());
-
           passenger.flightDate = piece9;
-
-          bool isLeapYear(int year) =>
-              (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
-          print("*******************************" + print.toString());
-
-          // TODO : piece9 --> dayOfFlight
-
         } on Exception catch (ex) {
           passenger = null;
           debugPrint(
@@ -88,11 +72,7 @@ class BoardingPassParser {
       }
     } else {
       passenger = null;
-
-      debugPrint("HERHANGİ BİR TARAMA VERİSİ ALINAMADI....İÇERİK : " +
-          barcodeContent.length.toString());
     }
-    // TODO checkt and edit with passneger object return statement
     return passenger;
   }
 }

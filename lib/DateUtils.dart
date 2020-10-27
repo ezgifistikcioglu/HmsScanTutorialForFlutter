@@ -12,6 +12,19 @@ class DateUtils {
     return DateTime.now();
   }
 
+  static String getDateTimeFromDayOfYear(String givenDayOfYear) {
+    //  new DateTime.utc(1969, 7, 20, 20, 18, 04);
+    // (year, month, day, hour, minute, second, millisecond, microsecon);
+    DateTime date = new DateTime(getTodayDateTime().year, 1,
+        int.parse(givenDayOfYear), 12, 30, 40, 100, 100);
+    debugPrint("*** getDateTimeFromDayOfYear : date " +
+        givenDayOfYear.toString() +
+        " -> " +
+        date.toString());
+
+    return date.toString().substring(0, 10);
+  }
+
   static String getDayOfYearFromDateTime(DateTime selectedDateTime) {
     String dayOfYear = DateFormat("D").format(selectedDateTime).toString();
     debugPrint("**** getDayOfYearFromDateTime : " +

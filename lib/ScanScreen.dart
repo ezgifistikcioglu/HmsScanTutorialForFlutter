@@ -7,6 +7,8 @@ import 'package:huawei_scan/hmsScanUtils/HmsScanUtils.dart';
 import 'package:huawei_scan/model/ScanResponse.dart';
 import 'package:huawei_scan/utils/HmsScanTypes.dart';
 
+import 'DateUtils.dart';
+
 class ScanScreen extends StatefulWidget {
   @override
   _ScanScreenState createState() => _ScanScreenState();
@@ -24,7 +26,7 @@ class _ScanScreenState extends State<ScanScreen> {
   String seatNumberSc;
   String resultSc;
   Passenger passenger;
-
+  String dateFromDay;
   @override
   void initState() {
     startScan();
@@ -45,8 +47,8 @@ class _ScanScreenState extends State<ScanScreen> {
         setUiValuesFromPassengerObjectParsedByTicket(passenger);
         resultSc = result;
       } else {
-        resultSc = null;
         debugPrint("Please scan a Valid boardingPass ticket barcode!!!");
+        resultSc = null;
       }
     });
   }
@@ -59,6 +61,7 @@ class _ScanScreenState extends State<ScanScreen> {
     operatingCarrierDesignatorSc = passenger.iataCode;
     flightNumberSc = passenger.flightNo;
     dayOfFlightSc = passenger.flightDate;
+    dateFromDay = DateUtils.getDateTimeFromDayOfYear(dayOfFlightSc);
     compartmentClassCodeSc = passenger.compartment;
     seatNumberSc = passenger.seatNo;
   }
@@ -145,7 +148,7 @@ class _ScanScreenState extends State<ScanScreen> {
                                             height: 9.0,
                                           ),
                                           Text(
-                                            dayOfFlightSc,
+                                            dateFromDay,
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
