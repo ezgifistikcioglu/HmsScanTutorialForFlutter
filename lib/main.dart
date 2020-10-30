@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hms_scan_demo/GenerateBarcodeScreen.dart';
+import 'package:huawei_scan/hmsScanPermissions/HmsScanPermissions.dart';
 
 import 'ScanScreen.dart';
 
@@ -24,6 +25,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    permissionRequest();
+    super.initState();
+  }
+
+  permissionRequest() async {
+    bool permissionResult =
+        await HmsScanPermissions.hasCameraAndStoragePermission();
+    if (permissionResult == false) {
+      await HmsScanPermissions.requestCameraAndStoragePermissions();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

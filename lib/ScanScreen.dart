@@ -27,6 +27,7 @@ class _ScanScreenState extends State<ScanScreen> {
   String resultSc;
   Passenger passenger;
   String dateFromDay;
+
   @override
   void initState() {
     startScan();
@@ -40,17 +41,18 @@ class _ScanScreenState extends State<ScanScreen> {
     String result = response.originalValue;
     debugPrint("Detail Scan Result: " + result.toString());
 
-    // TODO check camera permission and notify to user
-    setState(() {
-      passenger = BoardingPassParser().parseAndGetPassengerDetail(result);
-      if (passenger != null) {
-        setUiValuesFromPassengerObjectParsedByTicket(passenger);
+    passenger = BoardingPassParser().parseAndGetPassengerDetail(result);
+    if (passenger != null) {
+      setUiValuesFromPassengerObjectParsedByTicket(passenger);
+      setState(() {
         resultSc = result;
-      } else {
-        debugPrint("Please scan a Valid boardingPass ticket barcode!!!");
+      });
+    } else {
+      debugPrint("Please scan a Valid boardingPass ticket barcode!!!");
+      setState(() {
         resultSc = null;
-      }
-    });
+      });
+    }
   }
 
   setUiValuesFromPassengerObjectParsedByTicket(Passenger passenger) {
@@ -74,8 +76,10 @@ class _ScanScreenState extends State<ScanScreen> {
           title: Text('BOARDING PASS'),
           backgroundColor: Colors.deepPurple[200],
         ),
-        body: resultSc != null
-            ? Stack(
+        body: resultSc == null
+            ? CustomAlertDialog(
+                "Please scan a Valid boardingPass ticket barcode")
+            : Stack(
                 children: <Widget>[
                   Positioned.fill(
                     child: Column(
@@ -304,8 +308,6 @@ class _ScanScreenState extends State<ScanScreen> {
                     ),
                   )
                 ],
-              )
-            : CustomAlertDialog(
-                "Please scan a Valid boardingPass ticket barcode"));
+              ));
   }
 }

@@ -45,7 +45,6 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
     barcodeContent = contentController.text;
 
     bitmapRequest = BuildBitmapRequest(content: barcodeContent);
-
     bitmapRequest.type = scanTypeValueFromDropDown;
 
     String surname = surnameController.text;
@@ -56,8 +55,6 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
     String seatNumber = seatNumberController.text;
     String sequenceNumber = sequenceNumberController.text;
 
-    debugPrint("**** getContentDetail set variables");
-
     // TODO : check and fix for all values validation control states
     if (surname.isEmpty ||
         name.isEmpty ||
@@ -67,11 +64,8 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
         seatNumber.isEmpty ||
         surname.isEmpty ||
         sequenceNumber.isEmpty) {
-      // debugPrint("**** getContentDetail bitmapRequest = null;");
       bitmapRequest = null;
     } else {
-      // debugPrint("**** getContentDetail bitmapRequest not null");
-
       if ((surname.length + name.length) > 18) {
         if (surname.length > 9) {
           surname = surname.substring(0, 9);
@@ -93,22 +87,15 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
       }
       barcodeContentManually =
           barcodeContentManually + flightFrom + flightTo + airlineIata;
-
       while (flightNo.length < 4) {
         flightNo = "0" + flightNo;
       }
-
       if (flightNo.length == 4) {
         flightNo = flightNo + " ";
       }
 
-      // TODO : transform date to dayofYear
+      // Transform date to dayOfYear
       flightDate = DateUtils.getDayOfYearFromDateTime(selectedDateTime);
-      debugPrint("***************************** selectedDateTime : " +
-          selectedDateTime.toString());
-      debugPrint("***************************** selectedDateTime : " +
-          flightDate.toString());
-
       barcodeContentManually = barcodeContentManually + flightNo;
       barcodeContentManually = barcodeContentManually + flightDate;
       barcodeContentManually = barcodeContentManually + compartmentCode;
@@ -117,7 +104,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
       barcodeContentManually = barcodeContentManually + " 10";
       bitmapRequest.content = barcodeContentManually;
 
-      debugPrint("***************************** barcodeContentManually : " +
+      debugPrint("******* barcodeContentManually : " +
           barcodeContentManually.toString());
 
       return bitmapRequest;
@@ -127,13 +114,10 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
   void callDatePicker() async {
     selectedDateTime = await DateUtils.getDatePickerDialog(context);
     selectedDateController.text = selectedDateTime.toString().substring(0, 10);
-    debugPrint(
-        "**** callDatePicker : selectedDate : " + selectedDateController.text);
     setState(() {});
   }
 
   generateBarcode() async {
-    debugPrint("**** generateBarcode");
     bitmapRequest = getContentDetail(barcodeContentManually);
     if (bitmapRequest == null) {
       ShowMyDialog.showCustomDialog(context, "INFORMATION VALIDATION ERROR ",
@@ -192,11 +176,11 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
                           ],
                         )),
                     CustomTextFormField(
-                      text: "surname Content",
+                      text: "Surname Content",
                       controller: surnameController,
                     ),
                     CustomTextFormField(
-                      text: "name Width",
+                      text: "Name Width",
                       controller: nameController,
                     ),
                     Row(
@@ -211,7 +195,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
                                 keyboardType: TextInputType.datetime,
                                 suffixIcon: new IconButton(
                                   icon: new Icon(Icons.chevron_right),
-                                  tooltip: 'Choose date',
+                                  tooltip: 'Choose Date',
                                   onPressed: callDatePicker,
                                 ),
                               ),
@@ -224,7 +208,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
                       children: [
                         Expanded(
                           child: CustomTextFormField(
-                            text: "flight Number",
+                            text: "Flight Number",
                             controller: flightNumberController,
                           ),
                         ),
