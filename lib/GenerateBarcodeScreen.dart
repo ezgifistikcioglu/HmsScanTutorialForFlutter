@@ -41,6 +41,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
   final TextEditingController sequenceNumberController =
       TextEditingController(text: "0058");
 
+  // Get Ui TextEditingController contents
   BuildBitmapRequest getContentDetail(String barcodeContent) {
     barcodeContent = contentController.text;
 
@@ -55,7 +56,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
     String seatNumber = seatNumberController.text;
     String sequenceNumber = sequenceNumberController.text;
 
-    // TODO : check and fix for all values validation control states
+    // Validation must not be null
     if (surname.isEmpty ||
         name.isEmpty ||
         pnrNo.isEmpty ||
@@ -74,6 +75,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
           name = name.substring(0, 9);
         }
       }
+      //Create content suitable for flight tickets with barcodeContentManually
       barcodeContentManually = "M1" + surname + "/" + name;
 
       while (barcodeContentManually.length < 22) {
@@ -96,6 +98,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
 
       // Transform date to dayOfYear
       flightDate = DateUtils.getDayOfYearFromDateTime(selectedDateTime);
+
       barcodeContentManually = barcodeContentManually + flightNo;
       barcodeContentManually = barcodeContentManually + flightDate;
       barcodeContentManually = barcodeContentManually + compartmentCode;
@@ -104,13 +107,13 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
       barcodeContentManually = barcodeContentManually + " 10";
       bitmapRequest.content = barcodeContentManually;
 
-      debugPrint("******* barcodeContentManually : " +
-          barcodeContentManually.toString());
+      // debugPrint("******* barcodeContentManually : " + barcodeContentManually.toString());
 
       return bitmapRequest;
     }
   }
 
+  // Show date picker in the ui.
   void callDatePicker() async {
     selectedDateTime = await DateUtils.getDatePickerDialog(context);
     selectedDateController.text = selectedDateTime.toString().substring(0, 10);
@@ -118,6 +121,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
   }
 
   generateBarcode() async {
+    //Constructing request object with contents from getContentDetail.
     bitmapRequest = getContentDetail(barcodeContentManually);
     if (bitmapRequest == null) {
       ShowMyDialog.showCustomDialog(context, "INFORMATION VALIDATION ERROR ",
@@ -126,6 +130,7 @@ class _GenerateBarcodeScreenState extends State<GenerateBarcodeScreen> {
     } else {
       Image image;
       try {
+        //Call buildBitmap API with request object.
         image = await HmsScanUtils.buildBitmap(bitmapRequest);
       } on PlatformException catch (err) {
         debugPrint(err.details);

@@ -35,12 +35,16 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   startScan() async {
+    //Constructing request object.
     DefaultViewRequest request =
         new DefaultViewRequest(scanType: HmsScanTypes.AllScanType);
+    //Calling defaultView API with the request object and Obtain the result.
     ScanResponse response = await HmsScanUtils.startDefaultView(request);
+    //Print the result.
     String result = response.originalValue;
-    debugPrint("Detail Scan Result: " + result.toString());
+    //debugPrint("Detail Scan Result: " + result.toString());
 
+    //Get passenger details from result
     passenger = BoardingPassParser().parseAndGetPassengerDetail(result);
     if (passenger != null) {
       setUiValuesFromPassengerObjectParsedByTicket(passenger);
